@@ -18,6 +18,8 @@ const formatFiltersToQuery = (array, metadatas) => {
       return { [formattedName]: value };
     }
 
+    console.log('wtf', { [formattedName]: value });
+
     return { [`${formattedName}${filter}`]: value };
   });
 

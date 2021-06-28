@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { get, isEmpty } from 'lodash';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Header } from '@buffetjs/custom';
 import { Flex, Padded } from '@buffetjs/core';
@@ -25,10 +25,9 @@ import pluginPermissions from '../../permissions';
 import { formatFiltersFromQuery, getRequestUrl, getTrad } from '../../utils';
 import Container from '../../components/Container';
 import CustomTable from '../../components/CustomTable';
-import FilterPicker from '../../components/FilterPicker';
 import Search from '../../components/Search';
 import ListViewProvider from '../../components/ListViewProvider';
-import { AddFilterCta, FilterIcon, Wrapper } from './components';
+import { Wrapper } from './components';
 import FieldPicker from './FieldPicker';
 import Filter from './Filter';
 import Footer from './Footer';
@@ -49,6 +48,7 @@ import {
 } from './actions';
 import makeSelectListView from './selectors';
 import { getAllAllowedHeaders, getFirstSortableHeader, buildQueryString } from './utils';
+import AttributeFilter from '../../components/AttributeFilter';
 
 /* eslint-disable react/no-array-index-key */
 function ListView({
@@ -380,16 +380,6 @@ function ListView({
         toggleModalDeleteAll={handleToggleModalDeleteAll}
         setQuery={setQuery}
       >
-        <FilterPicker
-          contentType={contentType}
-          filters={filters}
-          isOpen={isFilterPickerOpen}
-          metadatas={metadatas}
-          name={label}
-          toggleFilterPickerState={toggleFilterPickerState}
-          setQuery={setQuery}
-          slug={slug}
-        />
         <Container className="container-fluid">
           {!isFilterPickerOpen && <Header {...headerProps} isLoading={isLoading && canRead} />}
           {isSearchable && canRead && (
@@ -417,10 +407,13 @@ function ListView({
                   <div className="row" style={{ marginLeft: 0, marginRight: 0 }}>
                     {isFilterable && (
                       <>
-                        <AddFilterCta type="button" onClick={toggleFilterPickerState}>
-                          <FilterIcon />
-                          <FormattedMessage id="app.utils.filters" />
-                        </AddFilterCta>
+                        <Padded right size="sm">
+                          <AttributeFilter
+                            contentType={contentType}
+                            slug={slug}
+                            metaData={metadatas}
+                          />
+                        </Padded>
                         {filters.map(({ filter: filterName, name, value }, key) => (
                           <Filter
                             contentType={contentType}
